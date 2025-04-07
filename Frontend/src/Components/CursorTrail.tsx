@@ -1,6 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-
+import reactlogo from "../assets/react.svg";
+import dockerlogo from "../assets/docker.svg";
+import nextjslogo from "../assets/next-js.svg";
+import nodejslogo from "../assets/node-js.svg";
+import mongo from "../assets/mongodb.svg";
+import postgresql from "../assets/postgresql.svg";
+import prisma from "../assets/prisma.svg";
 type Trail = {
   id: number;
   x: number;
@@ -12,10 +18,10 @@ const TrailImage: React.FC<Trail> = ({ x, y, src }) => {
   return (
     <motion.img
       src={src}
-      className="size-40 pointer-events-none fixed z-50"
+      className="size-20 filter grayscale  pointer-events-none fixed"
       initial={{ x: x - 80, y: y - 80, opacity: 1 }}
-      animate={{ y: y - 40, opacity: 0 }}
-      transition={{ duration: 2.5, ease: "easeOut" }}
+      animate={{ y: y + 80, opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeIn" }}
       alt="trail"
     />
   );
@@ -23,18 +29,31 @@ const TrailImage: React.FC<Trail> = ({ x, y, src }) => {
 
 const CursorTrail: React.FC = () => {
   const [trails, setTrails] = useState<Trail[]>([]);
+  const lastTrailTime = useRef<number>(0); // tracks the last time a trail was created
 
   const imageList: string[] = [
-    "https://images.unsplash.com/photo-1587614382346-4ec70e388f43?auto=format&fit=crop&w=60&q=80",
-  "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=60&q=80",
-  "https://images.unsplash.com/photo-1602526216073-7c4b086f3082?auto=format&fit=crop&w=60&q=80"
+    reactlogo,
+    dockerlogo,
+    nextjslogo,
+    mongo,
+    postgresql,
+    prisma,
     
+   "https://cdn-lfs.hf.co/repos/96/a2/96a2c8468c1546e660ac2609e49404b8588fcf5a748761fa72c154b2836b4c83/9cf16f4f32604eaf76dabbdf47701eea5a768ebcc7296acc1d1758181f71db73?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27hf-logo.png%3B+filename%3D%22hf-logo.png%22%3B&response-content-type=image%2Fpng&Expires=1744036996&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc0NDAzNjk5Nn19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy5oZi5jby9yZXBvcy85Ni9hMi85NmEyYzg0NjhjMTU0NmU2NjBhYzI2MDllNDk0MDRiODU4OGZjZjVhNzQ4NzYxZmE3MmMxNTRiMjgzNmI0YzgzLzljZjE2ZjRmMzI2MDRlYWY3NmRhYmJkZjQ3NzAxZWVhNWE3NjhlYmNjNzI5NmFjYzFkMTc1ODE4MWY3MWRiNzM%7EcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj0qJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT0qIn1dfQ__&Signature=vrR%7E77uyPFqLG6ICgzJpSSPEnSlU3tX5ewO-89XtG01PebViuyLUBPv1%7EyfYJPDvTKZmXI7W8DzxoGIsSHbhPmSP1zrq22WhHdwoRzdNs-ECUc2%7EOx-Wjfi9xK07ixNYDEUtbluHjRv76XwWrnxS3Hai8H40UfKAoQ8vCnEXRP5-4DHWrfH3lnCQyRpHAtqNSO2wHFJtlaVt3%7Ej1IBvHDwIC0qF2la-kxVVy0R8DFNZAZgIgz7VkcLAhVPJuZrkEOdUMMXJHt5HGsk-Iiyl8ANYRsJfD45epUN3asxeC1GxRAKy24qzf2pMZUn148cNpU3GX7VsbiG6JnCdOvNevNA__&Key-Pair-Id=K3RPWS32NSSJCE",
+   nodejslogo,
   ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      const now = Date.now();
+      const throttleDelay = 200; // milliseconds between trails (adjust as needed)
+
+      if (now - lastTrailTime.current < throttleDelay) return;
+
+      lastTrailTime.current = now;
+
       const newTrail: Trail = {
-        id: Date.now() + Math.random(),
+        id: now + Math.random(),
         x: e.clientX,
         y: e.clientY,
         src: imageList[Math.floor(Math.random() * imageList.length)],
@@ -42,10 +61,9 @@ const CursorTrail: React.FC = () => {
 
       setTrails((prev) => [...prev, newTrail]);
 
-      
       setTimeout(() => {
         setTrails((prev) => prev.filter((t) => t.id !== newTrail.id));
-      }, 30500);
+      }, 3000);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
