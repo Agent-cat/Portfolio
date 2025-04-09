@@ -1,68 +1,52 @@
-import React, { useEffect, useState } from 'react';
+// import { useEffect, useState } from "react"
+// import { mix, motion } from "framer-motion"
+// import { text } from "framer-motion/client";
+// interface CustomCursorProps {
+//   cursorVarients: string;
+//   setcursorVariants: React.Dispatch<React.SetStateAction<string>>;
+// }
 
-const CustomCursor: React.FC = () => {
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+// const CustomCursor = ({ cursorVarients, setcursorVariants }: CustomCursorProps) => {
+//   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  
+//   useEffect(() => {
+ 
 
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', move);
-    return () => window.removeEventListener('mousemove', move);
-  }, []);
+//     const mousemove = (event: MouseEvent) => {
+//       setCursorPosition({
+//         x: event.clientX,
+//         y: event.clientY
+//       })
 
-  return (
-    <>
-      {/* Hide default cursor */}
-      <style>{`body { cursor: none; }`}</style>
+//     }
+    
+//       window.addEventListener("mousemove", mousemove)
 
-      <div
-        style={{
-          position: 'fixed',
-          top: position.y,
-          left: position.x,
-          width: '40px',
-          height: '40px',
-          marginLeft: '-20px',
-          marginTop: '-20px',
-          border: '2px solid #00f',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-          {/* Horizontal Line */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: '60%',
-              height: '2px',
-              backgroundColor: '#00f',
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-          {/* Vertical Line */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: '2px',
-              height: '60%',
-              backgroundColor: '#00f',
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-        </div>
-      </div>
-    </>
-  );
-};
+//       return () => {
+//         window.removeEventListener("mousemove", mousemove)
+//       }
+//     }
+//   , [])
 
-export default CustomCursor;
+//   const variants = {
+//     default:{
+//       x:cursorPosition.x - 16,
+//       y:cursorPosition.y - 16,
+//     },
+//     text:{
+//       x:cursorPosition.x - 75,
+//       y:cursorPosition.y - 75,
+//       height:150,
+//       width:150,
+//       backgroundColor:"#c8c8c8",
+//       zIndex:100,
+//       mixBlendMode:"difference",
+//    }}
+//   return (
+//     <motion.div variants={variants} animate={cursorVarients} className="cursor">
+      
+//     </motion.div>
+//   )
+// }
+
+// export default CustomCursor

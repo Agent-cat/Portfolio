@@ -8,6 +8,7 @@ import mongo from "../assets/mongodb.svg";
 import postgresql from "../assets/postgresql.svg";
 import prisma from "../assets/prisma.svg";
 import langchain from "../assets/langchain.svg";
+
 type Trail = {
   id: number;
   x: number;
@@ -15,11 +16,15 @@ type Trail = {
   src: string;
 };
 
+interface CursorTrailProps {
+  isActive?: boolean;
+}
+
 const TrailImage: React.FC<Trail> = ({ x, y, src }) => {
   return (
     <motion.img
       src={src}
-      className="size-20 filter grayscale  pointer-events-none fixed"
+      className="size-20 z-10 filter grayscale  pointer-events-none fixed"
       initial={{ x: x - 80, y: y - 80, opacity: 1 }}
       animate={{ y: y + 80, opacity: 0 }}
       transition={{ duration: 0.7, ease: "easeIn" }}
@@ -28,7 +33,7 @@ const TrailImage: React.FC<Trail> = ({ x, y, src }) => {
   );
 };
 
-const CursorTrail: React.FC = () => {
+const CursorTrail: React.FC<CursorTrailProps> = ({ isActive = true }) => {
   const [trails, setTrails] = useState<Trail[]>([]);
   const lastTrailTime = useRef<number>(0); // tracks the last time a trail was created
 
@@ -47,8 +52,10 @@ const CursorTrail: React.FC = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      if (!isActive) return;
+
       const now = Date.now();
-      const throttleDelay = 200; // milliseconds between trails (adjust as needed)
+      const throttleDelay = 600; // milliseconds between trails (adjust as needed)
 
       if (now - lastTrailTime.current < throttleDelay) return;
 
@@ -70,7 +77,7 @@ const CursorTrail: React.FC = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isActive]);
 
   return (
     <>
